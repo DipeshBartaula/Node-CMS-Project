@@ -13,8 +13,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // allBlog
-app.get("/", (req, res) => {
-  res.render("home");
+app.get("/", async (req, res) => {
+  // table bata data nikalnu parney vo
+  //blogs vanney table bata vayejati sabbai data dey vaneko
+  const allBlogs = await blogs.findAll();
+  // console.log(allBlogs);
+
+  // blogs vanney key/name ma allBlogs/data pass gareko ejs file lai
+  res.render("home", { blogs: allBlogs });
 });
 
 //createBlog
@@ -40,8 +46,10 @@ app.post("/createBlog", async (req, res) => {
     description: description,
   });
 
-  res.send("form submitted sucessfully");
+  res.redirect("/");
 });
+
+//database/table bata kasari nikalne
 
 app.listen(3000, () => {
   console.log("Nodejs project has started at 3000 port");

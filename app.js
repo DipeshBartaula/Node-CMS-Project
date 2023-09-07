@@ -1,5 +1,9 @@
 const express = require("express");
+const { blogs } = require("./model/index");
 const app = express();
+
+// database connection
+require("./model/index");
 
 //telling the nodejs to set view egine to ejs
 app.set("view engine", "ejs");
@@ -19,8 +23,23 @@ app.get("/createBlog", (req, res) => {
 });
 
 //createBlog Post
-app.post("/createBlog", (req, res) => {
-  console.log(req.body.description);
+app.post("/createBlog", async (req, res) => {
+  console.log(req.body);
+  // second approach
+  // const {title,description,subtitle} = req.body
+  // first approach
+  const title = req.body.title;
+  const description = req.body.description;
+  const subTitle = req.body.subtitle;
+
+  // database ma halnu paryo , database sanaga kehi operation await halnu parney hunchha
+  // agadi , await halepaxi mathi async halnu parney hunchha
+  await blogs.create({
+    title: title,
+    subTitle: subTitle,
+    description: description,
+  });
+
   res.send("form submitted sucessfully");
 });
 

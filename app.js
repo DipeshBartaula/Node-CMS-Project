@@ -49,7 +49,25 @@ app.post("/createBlog", async (req, res) => {
   res.redirect("/");
 });
 
-//database/table bata kasari nikalne
+//single blog page
+app.get("/single/:id", async (req, res) => {
+  const id = req.params.id;
+  //second approach
+  //const {id} = req.params
+
+  //id ko data nikalnu paryo
+  const blog = await blogs.findAll({
+    where: {
+      id: id,
+    },
+  });
+  // console.log(blog);
+
+  //second approach
+  //const blog = await blogs.findByPk(id)
+
+  res.render("singleBlog", { blog: blog });
+});
 
 app.listen(3000, () => {
   console.log("Nodejs project has started at 3000 port");

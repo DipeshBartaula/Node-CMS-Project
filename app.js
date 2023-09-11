@@ -69,6 +69,19 @@ app.get("/single/:id", async (req, res) => {
   res.render("singleBlog", { blog: blog });
 });
 
+//delete page
+app.get("/delete/:id", async (req, res) => {
+  const id = req.params.id;
+
+  //id herera blog delete garnu paryo
+  await blogs.destroy({
+    where: {
+      id: id,
+    },
+  });
+  res.redirect("/");
+});
+
 app.listen(3000, () => {
   console.log("Nodejs project has started at 3000 port");
 });

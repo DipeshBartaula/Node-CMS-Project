@@ -82,6 +82,51 @@ app.get("/delete/:id", async (req, res) => {
   res.redirect("/");
 });
 
+//Edit or update the blog
+app.get("/edit/:id", async (req, res) => {
+  const id = req.params.id;
+
+  //finding blog of choosen id
+  const blog = await blogs.findAll({
+    where: {
+      id: id,
+    },
+  });
+
+  res.render("editBlog", { blog: blog });
+});
+
+app.post("/editBlog/:id", async (req, res) => {
+  const id = req.params.id;
+  // console.log(req.body);
+  const title = req.body.title;
+  const subTitle = req.body.subTitle;
+  const description = req.body.description;
+
+  //first approach
+  // await blogs.update(req.body, {
+  //   where: {
+  //     id: id;
+  //   }
+  // })
+
+  //second approach
+  await blogs.update(
+    {
+      title: title,
+      subTitle: subTitle,
+      description: description,
+    },
+    {
+      where: {
+        id: id,
+      },
+    }
+  );
+
+  res.redirect("/single/" + id);
+});
+
 app.listen(3000, () => {
   console.log("Nodejs project has started at 3000 port");
 });

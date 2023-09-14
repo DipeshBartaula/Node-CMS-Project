@@ -8,6 +8,9 @@ require("./model/index");
 //telling the nodejs to set view egine to ejs
 app.set("view engine", "ejs");
 
+//nodejs lai file access garna dey
+app.use(express.static("public/"));
+
 // form bata data aairaxa parse gara or handle gar vaneko ho
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

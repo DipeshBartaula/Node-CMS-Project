@@ -1,3 +1,5 @@
+const { blogs } = require("../../model/index");
+
 exports.renderCreateBlog = (req, res) => {
   res.render("createBlog");
 };

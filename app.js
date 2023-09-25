@@ -26,9 +26,11 @@ app.use(express.urlencoded({ extended: true }));
 
 //Routes
 const blogRoute = require("./routes/blogRoute");
+const authRoute = require("./routes/authRoute");
 
 app.use("", blogRoute); // localhost:3000 + /createBlog === localhost:3000/createBlog
 // app.use("/hello", blogRoute); // localhost:3000/hello +/createBlog = locahost:3000/hello/createBlog
+app.use("", authRoute);
 
 app.listen(3000, () => {
   console.log("Nodejs project has started at 3000 port");

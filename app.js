@@ -10,6 +10,7 @@ const {
   renderEditBlog,
 } = require("./controller/blog/blogController");
 const app = express();
+require('dotenv').config() // requiring dotenv and initiliaixing ti with default configuration
 
 // database connection
 require("./model/index");
@@ -26,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Routes
 const blogRoute = require("./routes/blogRoute");
-const authRoute = require("./routes/authRoute");
+const auth Route = require("./routes/authRoute");
 
 app.use("", blogRoute); // localhost:3000 + /createBlog === localhost:3000/createBlog
 // app.use("/hello", blogRoute); // localhost:3000/hello +/createBlog = locahost:3000/hello/createBlog

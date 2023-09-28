@@ -1,6 +1,6 @@
 const { users } = require("../../model");
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 exports.renderRegisterForm = (req, res) => {
   res.render("register");
 };
@@ -57,6 +57,19 @@ exports.loginUser = async (req, res) => {
     const associatedEmailPassword = associatedDataWithEmail[0].password;
     const isMatched = bcrypt.compareSync(password, associatedEmailPassword); // true or false
     if (isMatched) {
+      //GENERATE TOKEN HERE
+
+      const token = jwt.sign(
+        { id: associatedDataWithEmail[0].id },
+        process.env.SECRETKEY,
+        {
+          expiresIn: "30d",
+        }
+      );
+      // console.log("This is token" + token)
+      // console.log(process.env.SECRETEKEY);
+      res.cookie("token", token); // browser ma application tab bitra cookei vanney ma save hunxa
+
       res.send("Logged in success");
     } else {
       res.send("Invalid password");

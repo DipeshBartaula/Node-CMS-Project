@@ -1,2 +1,5 @@
 .env
-node_modules
+
+# To ignore node_modules first remove it from cache using command:
+# git rm -r --cached node_modules 
+node_modules/

@@ -5,7 +5,9 @@ exports.renderCreateBlog = (req, res) => {
 };
 
 exports.createBlog = async (req, res) => {
-  console.log(req.body);
+  //check that incoming data from middleware
+  // console.log(req.user, "UserId from createBlog");
+  const userId = req.user[0].id;
   // second approach
   // const {title,description,subtitle} = req.body
   // first approach
@@ -19,6 +21,7 @@ exports.createBlog = async (req, res) => {
     title: title,
     subTitle: subTitle,
     description: description,
+    userId,
   });
 
   res.redirect("/");

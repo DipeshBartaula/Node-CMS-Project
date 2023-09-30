@@ -11,7 +11,7 @@ const {
 } = require("./controller/blog/blogController");
 const app = express();
 require("dotenv").config(); // requiring dotenv and initiliaixing ti with default configuration
-
+const cookieParser = require("cookie-parser");
 // database connection
 require("./model/index");
 
@@ -20,6 +20,8 @@ app.set("view engine", "ejs");
 
 //nodejs lai file access garna dey
 app.use(express.static("public/"));
+
+app.use(cookieParser);
 
 // form bata data aairaxa parse gara or handle gar vaneko ho
 app.use(express.json());

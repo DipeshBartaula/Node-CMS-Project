@@ -7,6 +7,7 @@ const {
   editBlog,
   renderEditBlog,
 } = require("../controller/blog/blogController");
+const { isAuthenticated } = require("../middleware/isAuthenticated");
 
 const router = require("express").Router();
 
@@ -14,7 +15,10 @@ const router = require("express").Router();
 // app.get("/createBlog", renderCreateBlog);
 // app.post("/createBlog", createBlog);
 // Below code is also known as restfull api
-router.route("/createBlog").get(renderCreateBlog).post(createBlog);
+router
+  .route("/createBlog")
+  .get(renderCreateBlog)
+  .post(isAuthenticated, createBlog);
 router.route("/").get(allBlog);
 router.route("/single/:id").get(singleBlog);
 router.route("/delete/:id").get(deleteBlog);

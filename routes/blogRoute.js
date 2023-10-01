@@ -6,6 +6,7 @@ const {
   deleteBlog,
   editBlog,
   renderEditBlog,
+  renderMyBlogs,
 } = require("../controller/blog/blogController");
 const { isAuthenticated } = require("../middleware/isAuthenticated");
 
@@ -21,8 +22,12 @@ router
   .post(isAuthenticated, createBlog);
 router.route("/").get(allBlog);
 router.route("/single/:id").get(singleBlog);
-router.route("/delete/:id").get(deleteBlog);
-router.route("/edit/:id").post(editBlog).get(renderEditBlog);
+router.route("/delete/:id").get(isAuthenticated, deleteBlog);
+router
+  .route("/edit/:id")
+  .post(isAuthenticated, editBlog)
+  .get(isAuthenticated, renderEditBlog);
+router.route("/myBlogs").get(isAuthenticated, renderMyBlogs);
 
 //we can do this as well
 // router.route("/:id").get(singleBlog).post(editBlog)

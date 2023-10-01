@@ -9,7 +9,7 @@ exports.isAuthenticated = async (req, res, next) => {
 
   //check if token given or not
   if (!token) {
-    return res.send("You must logged in");
+    return res.redirect("/login");
   }
 
   //verify token if it is legit or not
@@ -31,6 +31,7 @@ exports.isAuthenticated = async (req, res, next) => {
   } else {
     //middleware le next ma jada tala ko data lera janxa
     req.user = userExist[0]; // alternative decryptedResult.id
+    // console.log(userExist[0]);
     next();
   }
 };

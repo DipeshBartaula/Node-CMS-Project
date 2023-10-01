@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Website</title>
+    <link rel="stylesheet" href="css/blogs.css" />
+  </head>
+  <body>
+    <!-- // approach to reuse component  -->
+    <%- include("navBar") %>
+    <h1>My Blogs</h1>
+
+    <div class="container">
+      <% if(Blogs.length == 0){ %>
+      <h1>No Blogs</h1>
+
+      <% }else{ %> <% Blogs.forEach((blog)=>{ %>
+      <div class="card">
+        <h2><%- blog.title %></h2>
+        <h3><%- blog.subTitle %></h3>
+        <p><%- blog.description %></p>
+        <a href="/single/<%- blog.id %>">Read More</a>
+      </div>
+      <% }) %> <% } %>
+    </div>
+  </body>
+</html>

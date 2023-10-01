@@ -1,4 +1,4 @@
-const { blogs } = require("../../model/index");
+const { blogs, users } = require("../../model/index");
 
 exports.renderCreateBlog = (req, res) => {
   res.render("createBlog");
@@ -7,7 +7,7 @@ exports.renderCreateBlog = (req, res) => {
 exports.createBlog = async (req, res) => {
   //check that incoming data from middleware
   // console.log(req.user, "UserId from createBlog");
-  const userId = req.user[0].id;
+  const userId = req.user.id;
   // second approach
   // const {title,description,subtitle} = req.body
   // first approach
@@ -46,6 +46,9 @@ exports.singleBlog = async (req, res) => {
   const blog = await blogs.findAll({
     where: {
       id: id,
+    },
+    include: {
+      model: users,
     },
   });
   // console.log(blog);
@@ -110,4 +113,16 @@ exports.editBlog = async (req, res) => {
   );
 
   res.redirect("/single/" + id);
+};
+
+exports.renderMyBlogs = async (req, res) => {
+  //get this users blogs
+  const userId = req.user.id;
+  //find blogs of this userId
+  const myBlogs = await blogs.findAll({
+    where: {
+      userId: userId,
+    },
+  });
+  res.render("myBlogs.ejs", { Blogs: myBlogs });
 };

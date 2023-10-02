@@ -12,6 +12,9 @@ const { isAuthenticated } = require("../middleware/isAuthenticated");
 
 const router = require("express").Router();
 
+const { multer, storage } = require("../middleware/multerConfig");
+const upload = multer({ storage: storage });
+
 // kohi createBlog ma gayo vaney k garney vaneko ho hae
 // app.get("/createBlog", renderCreateBlog);
 // app.post("/createBlog", createBlog);
@@ -19,7 +22,7 @@ const router = require("express").Router();
 router
   .route("/createBlog")
   .get(renderCreateBlog)
-  .post(isAuthenticated, createBlog);
+  .post(isAuthenticated, upload.single("image"), createBlog);
 router.route("/").get(allBlog);
 router.route("/single/:id").get(singleBlog);
 router.route("/delete/:id").get(isAuthenticated, deleteBlog);

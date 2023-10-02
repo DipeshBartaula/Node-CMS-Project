@@ -17,7 +17,7 @@ exports.isAuthenticated = async (req, res, next) => {
     token,
     process.env.SECRETKEY
   );
-  console.log(decryptedResult);
+  // console.log(decryptedResult);
 
   //check if that id( userId) users exists in table
   const userExist = await users.findAll({

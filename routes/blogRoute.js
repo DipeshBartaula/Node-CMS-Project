@@ -21,10 +21,10 @@ const upload = multer({ storage: storage });
 // Below code is also known as restfull api
 router
   .route("/createBlog")
-  .get(renderCreateBlog)
+  .get(isAuthenticated, renderCreateBlog)
   .post(isAuthenticated, upload.single("image"), createBlog);
 router.route("/").get(allBlog);
-router.route("/single/:id").get(singleBlog);
+router.route("/single/:id").get(isAuthenticated, singleBlog);
 router.route("/delete/:id").get(isAuthenticated, deleteBlog);
 router
   .route("/edit/:id")

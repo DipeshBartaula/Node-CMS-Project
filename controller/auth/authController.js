@@ -78,3 +78,8 @@ exports.loginUser = async (req, res) => {
   // exists xaina vaney -> []
   // exists xa vane -> [{name:"", password:"",email:""}]
 };
+
+exports.logOut = (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/login");
+};

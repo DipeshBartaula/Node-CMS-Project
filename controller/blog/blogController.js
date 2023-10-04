@@ -1,4 +1,5 @@
 const { blogs, users } = require("../../model/index");
+const fs = require("fs"); // fs->fileSystem
 
 exports.renderCreateBlog = (req, res) => {
   res.render("createBlog");
@@ -97,6 +98,33 @@ exports.editBlog = async (req, res) => {
   const subTitle = req.body.subTitle;
   const description = req.body.description;
 
+  const oldData = await blogs.findAll({
+    where: {
+      id: id,
+    },
+  });
+
+  let fileUrl;
+  if (req.file) {
+    fileUrl = process.env.PROJECT_URL + req.file.filename;
+    //For deleting the unwanted image from upload folder
+
+    const oldImagePath = oldData[0].image;
+    //console.log(oldImagePath) // http://localhost:3000/1696253533738-attention.png
+    const lengthOfUnwanted = "http://localhost:3000/".length;
+    const fileNameInUploadsFolder = oldImagePath.slice(lengthOfUnwanted); //lengthOfUnwanted = 22
+
+    fs.unlink("uploads/" + fileNameInUploadsFolder, (err) => {
+      if (err) {
+        console.log("error happened", err);
+      } else {
+        console.log("Delete Successfully");
+      }
+    });
+  } else {
+    fileUrl = oldData[0].image;
+  }
+
   //first approach
   // await blogs.update(req.body, {
   //   where: {
@@ -110,6 +138,7 @@ exports.editBlog = async (req, res) => {
       title: title,
       subTitle: subTitle,
       description: description,
+      image: fileUrl,
     },
     {
       where: {

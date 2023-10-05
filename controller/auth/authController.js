@@ -1,6 +1,7 @@
 const { users } = require("../../model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../../services/sendEmail");
 exports.renderRegisterForm = (req, res) => {
   res.render("register");
 };
@@ -94,6 +95,8 @@ exports.checkForgotPassword = async (req, res) => {
     return res.send("Please provide email");
   }
 
+  // const allUsers = await users.findAll();
+
   //if email => check if that email is in the table or not
   const emailExists = await users.findAll({
     where: {
@@ -105,5 +108,19 @@ exports.checkForgotPassword = async (req, res) => {
     return res.send("Users with that email doesn't exist");
   } else {
     //Send otp to that email
+    //for sending to multiple email holders
+    // for (var i = 0; i < allUsers.length; i++) {
+    //   await sendEmail({
+    //     email: allUsers[i].email,
+    //     subject: "This is bulk gmail",
+    //     otp: "This is to notify tha twe are closing soon",
+    //   });
+    // }
+    await sendEmail({
+      email: email,
+      subject: "Forgot Password OTP",
+      otp: 1234,
+    });
+    res.send("Email sent successfully");
   }
 };

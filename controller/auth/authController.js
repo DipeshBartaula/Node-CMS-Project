@@ -83,3 +83,27 @@ exports.logOut = (req, res) => {
   res.clearCookie("token");
   res.redirect("/login");
 };
+
+exports.forgotPassword = (req, res) => {
+  res.render("forgotPassword");
+};
+
+exports.checkForgotPassword = async (req, res) => {
+  const email = req.body.email;
+  if (!email) {
+    return res.send("Please provide email");
+  }
+
+  //if email => check if that email is in the table or not
+  const emailExists = await users.findAll({
+    where: {
+      email: email,
+    },
+  });
+
+  if (emailExists.length == 0) {
+    return res.send("Users with that email doesn't exist");
+  } else {
+    //Send otp to that email
+  }
+};

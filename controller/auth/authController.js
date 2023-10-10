@@ -153,11 +153,12 @@ exports.handleOTP = async (req, res) => {
     const currentTime = Date.now(); //current time
     const otpGeneratedTime = userData[0].otpGeneratedTime; //old time
     if (currentTime - otpGeneratedTime <= 120000) {
-      userData[0].otp = null;
-      userData[0].otpGeneratedTime = null;
-      await userData[0].save();
+      // userData[0].otp = null;
+      // userData[0].otpGeneratedTime = null;
+      // await userData[0].save();
 
-      res.redirect("/passwordChange");
+      // res.redirect("/passwordChange?email=" + email);
+      res.redirect(`/passwordChange?email=${email}&otp=${otp}`);
     } else {
       res.send("Otp has expired");
     }
@@ -165,5 +166,64 @@ exports.handleOTP = async (req, res) => {
 };
 
 exports.renderPasswordChangeForm = (req, res) => {
-  res.render("passwordChangeForm");
+  const email = req.query.email;
+  const otp = req.query.otp;
+
+  // console.log(email + " and " + otp);
+
+  if (!email || !otp) {
+    return res.send("Email and otp should be provided in the query");
+  }
+  res.render("passwordChangeForm", { email, otp });
+};
+
+exports.handlePasswordChange = async (req, res) => {
+  const email = req.params.email;
+  const otp = req.params.otp;
+  const newPassword = req.body.newPassword;
+  const confirmNewPassword = req.body.confirmNewPassword;
+  // console.log(email, otp, newPassword, confirmNewPassword);
+  if (!newPassword || !confirmNewPassword || !email) {
+    return res.send("Please provide newPassword and confirmNewPassword");
+  }
+
+  //checking if it's email's otp
+  const userData = await users.findAll({
+    where: {
+      email: email,
+      otp: otp,
+    },
+  });
+  if (userData.length == 0) {
+    res.send("Otp doesn't relate with given email");
+  }
+
+  if (newPassword !== confirmNewPassword) {
+    return res.send("newPassword and confirm passsword didn't match");
+  }
+
+  const currentTime = Date.now();
+  const otpGeneratedTime = userData[0].otpGeneratedTime;
+
+  if (currentTime - otpGeneratedTime >= 120000) {
+    return res.redirect("/forgotPassword");
+  }
+
+  const hashedNewPassword = bcrypt.hashSync(newPassword, 8);
+
+  // userData[0].password = hashedNewPassword;
+  // await userData[0].save();
+
+  await users.update(
+    {
+      password: hashedNewPassword,
+    },
+    {
+      where: {
+        email: email,
+      },
+    }
+  );
+
+  res.redirect("/login");
 };

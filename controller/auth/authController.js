@@ -32,7 +32,8 @@ exports.registerUser = async (req, res) => {
 //Login starts from here
 
 exports.renderLoginForm = (req, res) => {
-  res.render("login");
+  const error = req.flash("error");
+  res.render("login", { error });
 };
 
 exports.loginUser = async (req, res) => {
@@ -71,9 +72,11 @@ exports.loginUser = async (req, res) => {
       // console.log(process.env.SECRETEKEY);
       res.cookie("token", token); // browser ma application tab bitra cookei vanney ma save hunxa
 
-      res.send("Logged in success");
+      req.flash("success", "Logged in successfully");
+      res.redirect("/");
     } else {
-      res.send("Invalid password");
+      req.flash("error", "Invalid Password");
+      res.redirect("/login");
     }
   }
   // exists xaina vaney -> []

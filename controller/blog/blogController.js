@@ -35,13 +35,14 @@ exports.createBlog = async (req, res) => {
 };
 
 exports.allBlog = async (req, res) => {
+  const success = req.flash("success");
   // table bata data nikalnu parney vo
   //blogs vanney table bata vayejati sabbai data dey vaneko
   const allBlogs = await blogs.findAll();
   // console.log(allBlogs);
 
   // blogs vanney key/name ma allBlogs/data pass gareko ejs file lai
-  res.render("home", { blogs: allBlogs });
+  res.render("home", { blogs: allBlogs, success });
 };
 
 exports.singleBlog = async (req, res) => {

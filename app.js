@@ -15,6 +15,20 @@ const cookieParser = require("cookie-parser");
 // database connection
 require("./model/index");
 
+//require express-session and connect-flash
+const session = require("express-session");
+const flash = require("connect-flash");
+
+app.use(
+  session({
+    secret: "helloworld",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(flash());
+
 //telling the nodejs to set view egine to ejs
 app.set("view engine", "ejs");
 

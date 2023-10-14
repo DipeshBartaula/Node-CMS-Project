@@ -11,13 +11,23 @@ const {
   renderPasswordChangeForm,
   handlePasswordChange,
 } = require("../controller/auth/authController");
+const catchError = require("../services/catchError");
 
 const router = require("express").Router();
 
-router.route("/register").get(renderRegisterForm).post(registerUser);
-router.route("/login").get(renderLoginForm).post(loginUser);
+router
+  .route("/register")
+  .get(catchError(renderRegisterForm))
+  .post(catchError(registerUser));
+router
+  .route("/login")
+  .get(catchError(renderLoginForm))
+  .post(catchError(loginUser));
 router.route("/logout").get(logOut);
-router.route("/forgotPassword").get(forgotPassword).post(checkForgotPassword);
+router
+  .route("/forgotPassword")
+  .get(catchError(forgotPassword))
+  .post(catchError(checkForgotPassword));
 router.route("/otp").get(renderOtpForm);
 router.route("/otp/:id").post(handleOTP);
 

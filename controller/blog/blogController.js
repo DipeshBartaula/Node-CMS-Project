@@ -1,4 +1,5 @@
-const { blogs, users } = require("../../model/index");
+const { QueryTypes } = require("sequelize");
+const { blogs, users, sequelize } = require("../../model/index");
 const fs = require("fs"); // fs->fileSystem
 
 exports.renderCreateBlog = (req, res) => {
@@ -21,15 +22,39 @@ exports.createBlog = async (req, res) => {
     return res.send("Please provide title, description, subTitle, file");
   }
 
+  //Multitenant
+  //query to make separate blog table for each user
+  await sequelize.query(
+    `CREATE TABLE IF NOT EXISTS blog_${req.userId}(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,title VARCHAR(255),subTitle VARCHAR(255),description VARCHAR(255),userId INT REFERENCES users(id),image VARCHAR(255))`,
+    {
+      type: QueryTypes.CREATE,
+    }
+  );
+
+  //inserting data
+  await sequelize.query(
+    `INSERT INTO blog_${req.userId}(title,subTitle,description,userId,image) VALUES(?,?,?,?,?)`,
+    {
+      type: QueryTypes.INSERT,
+      replacements: [
+        title,
+        subTitle,
+        description,
+        req.userId,
+        process.env.PROJECT_URL + fileName,
+      ],
+    }
+  );
+
   // database ma halnu paryo , database sanaga kehi operation await halnu parney hunchha
   // agadi , await halepaxi mathi async halnu parney hunchha
-  await blogs.create({
-    title: title,
-    subTitle: subTitle,
-    description: description,
-    userId,
-    image: process.env.PROJECT_URL + fileName,
-  });
+  // await blogs.create({
+  //   title: title,
+  //   subTitle: subTitle,
+  //   description: description,
+  //   userId,
+  //   image: process.env.PROJECT_URL + fileName,
+  // });
 
   res.redirect("/");
 };
